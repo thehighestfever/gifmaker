@@ -1,0 +1,25 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+*.env
+
+# Git
+.git
+.gitignore
+
+# Docker Compose files (not needed inside the image)
+docker-compose.yml
+docker-compose.dev.yml
+
+# Local development files
+*.log
+*.tmp
+
+# OS / editor junk
+.DS_Store
+Thumbs.db

@@ -1,0 +1,16 @@
+services:
+  gifmaker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gifmaker-dev
+    container_name: gifmaker-dev
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
+      - /mnt/rewind/plex:/videos
+      - /mnt/rewind/gifs:/gifs
+    environment:
+      - FLASK_ENV=development
+

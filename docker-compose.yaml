@@ -1,0 +1,10 @@
+services:
+  gifmaker:
+    image: thfoster/gifmaker:latest
+    container_name: gifmaker
+    ports:
+      - "5000:5000"
+    volumes:
+      - /path/to/media:/videos
+      - /path/to/media/gifs:/gifs
+    restart: unless-stopped
