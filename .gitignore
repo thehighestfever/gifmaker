@@ -1,0 +1,11 @@
+# Ignore image files
+*.gif
+
+# Ignore video files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.wmv
+*.flv
+*.webm
