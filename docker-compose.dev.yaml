@@ -1,16 +1,29 @@
+version: "3.9"
+
 services:
   gifmaker:
+    container_name: gifmaker-dev
     build:
       context: .
       dockerfile: Dockerfile
-    image: gifmaker-dev
-    container_name: gifmaker-dev
     ports:
       - "5001:5000"
     volumes:
+      # Live‑mount your source code for instant updates
       - .:/app
-      - /mnt/rewind/plex:/videos
-      - /mnt/rewind/gifs:/gifs
+
+      # Plex or host video library
+      - /mnt/rewind/plex:/videos:ro
+
+      # Media output directory (persisted on host)
+      - ./media:/app/media
+
+      # Uploads directory (persisted on host)
+      - ./uploads:/app/uploads
+
     environment:
-      - FLASK_ENV=development
+      FLASK_ENV: development
+
+    # Ensures container restarts if it crashes
+    restart: unless-stopped
 

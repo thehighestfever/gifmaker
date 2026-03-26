@@ -1,203 +1,153 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Rewind Clip & GIF Maker</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta charset="UTF-8">
+    <title>REWIND GIF/MP4 TOOL</title>
+    <br>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background: #111;
+            color: #eee;
             margin: 0;
-            background: #000;
-            color: #e6e6e6;
-            font-size: 1.3rem;
+            padding: 0;
         }
-        .page {
+
+        h1 {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .panel {
+            background: #222;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        .row {
             display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            gap: 20px;
         }
-        .left {
+
+        .col {
             flex: 1;
-            padding: 28px;
         }
-        h2 { font-size: 2.2rem; margin-bottom: 16px; text-align:center; }
-        h3 { font-size: 1.7rem; margin-top: 28px; margin-bottom: 12px; }
 
-        input, button, select {
-            padding: 18px;
-            margin: 14px 0;
-            border: 1px solid #555;
-            background: #111;
-            color: #fff;
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 8px;
-            font-size: 1.3rem;
-        }
-        button { font-size: 1.5rem; font-weight: bold; }
-        button:hover { background: #222; }
-
-        #browser {
+        input, select, button {
+            padding: 6px;
+            margin: 4px 0;
+            border-radius: 4px;
             border: 1px solid #444;
-            background: #111;
-            height: 340px;
-            overflow-y: auto;
-            padding: 14px;
-            margin-top: 12px;
-            border-radius: 8px;
+            background: #333;
+            color: #eee;
         }
-        .item {
-            padding: 14px 8px;
+
+        button {
             cursor: pointer;
-            border-bottom: 1px solid #222;
-            font-size: 1.3rem;
+            background: #444;
         }
-        .item:hover { background: #222; }
-        .folder { font-weight: bold; }
+
+        button:hover {
+            background: #555;
+        }
+
+        #browser .item {
+            padding: 4px;
+            cursor: pointer;
+        }
+
+        #browser .folder {
+            color: #6cf;
+        }
+
+        #browser .item:hover {
+            background: #333;
+        }
+
+        .segment {
+            background: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+        }
+
+        .gif-item {
+            background: #333;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+        }
 
         .thumb {
-            max-width: 100%;
-            max-height: 260px;
+            max-width: 400px;
             display: block;
-            margin: 16px 0;
-            border: 1px solid #444;
-            border-radius: 8px;
-        }
-
-        .time-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
             margin-bottom: 6px;
         }
-        .time-col { flex: 1; }
 
-        .adjust-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .adjust-col {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .gif-gallery {
-            padding: 28px;
-            border-top: 1px solid #333;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .gif-item {
-            margin-bottom: 26px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
         .delete-btn {
-            background: #661111;
-            border: 1px solid #aa3333;
-            padding: 14px;
-            border-radius: 6px;
-            font-size: 1.2rem;
-            width: 50%;
-            display: block;
-            margin: 12px auto 0 auto;
-            text-align: center;
+            background: #933;
         }
-        .format-row label { margin-right: 20px; }
 
-        @media (min-width: 900px) {
-            .page { flex-direction: row; }
-            .left {
-                width: 55%;
-                padding: 40px;
-                overflow-y: auto;
-                height: 100vh;
-            }
-            .gif-gallery {
-                width: 45%;
-                border-left: 1px solid #333;
-                border-top: none;
-                padding: 40px;
-                overflow-y: auto;
-                height: 100vh;
-            }
-            h2 { font-size: 2rem; text-align: left; }
-            .time-row { gap: 40px; }
-            .adjust-row { gap: 40px; margin-bottom: 30px; }
-            input, select, button { font-size: 1.1rem; padding: 12px; }
-            h3 { font-size: 1.4rem; }
+        .delete-btn:hover {
+            background: #b44;
+        }
+
+        .stitch-select {
+            transform: scale(1.3);
         }
     </style>
 </head>
+
 <body>
-<div class="page">
+    <h1>REWIND</h1>
 
-    <div class="left">
-        <h2>Rewind Clip & GIF Maker</h2>
+    <div class="container">
 
-        <form method="POST" enctype="multipart/form-data">
+        <!-- ================================
+             FILE BROWSER
+        ================================= -->
+        <div class="panel">
+            <h2>File Browser</h2>
+            <div id="browser">(loading...)</div>
+        </div>
 
-            <h3>Upload a Video</h3>
-            <input type="file" name="video">
+        <!-- ================================
+             GENERATION FORM
+        ================================= -->
+        <div class="panel">
+            <h2>Create Clip</h2>
 
-            <h3>YouTube URL</h3>
-            <input type="text" name="youtube"
-                   value="{{ last_youtube }}"
-                   placeholder="https://www.youtube.com/watch?v=...">
+            <form id="genForm" method="POST" enctype="multipart/form-data">
 
-            <h3>Or Select a Host Video</h3>
-            <input type="text" name="hostpath" id="hostpath"
-                   value="{{ last_hostpath }}"
-                   placeholder="/videos/...">
+                <label>Host Path:</label>
+                <input type="text" id="hostpath" name="hostpath" value="{{ last_hostpath }}" style="width:100%;">
 
-            <div id="browser">Loading videos...</div>
+                <label>Upload File:</label>
+                <input type="file" name="video">
 
-            <h3>Preview</h3>
-            <video id="previewPlayer" controls style="width:100%; max-height:300px; display:none;"></video>
+                <label>Format:</label>
+                <select name="format">
+                    <option value="gif" {% if last_format == "gif" %}selected{% endif %}>GIF</option>
+                    <option value="mp4" {% if last_format == "mp4" %}selected{% endif %}>MP4</option>
+                </select>
 
-            <div style="display:flex; gap:20px; margin-top:10px;">
-                <button type="button" id="setStartBtn">Set Start</button>
-                <button type="button" id="setEndBtn">Set End</button>
-            </div>
+                <h3>Segments</h3>
+                <div id="segments">
+                    <div class="segment">
+                        <label>Start:</label>
+                        <input type="text" name="start[]" value="{{ last_start }}" placeholder="00:00:00" required>
 
-            <h3>Output format</h3>
-            <div class="format-row">
-                <label>
-                    <input type="radio" name="format" value="gif"
-                        {% if last_format == 'gif' %}checked{% endif %}>
-                    GIF
-                </label>
-                <label>
-                    <input type="radio" name="format" value="mp4"
-                        {% if last_format == 'mp4' %}checked{% endif %}>
-                    MP4
-                </label>
-            </div>
+                        <label>End:</label>
+                        <input type="text" name="end[]" value="{{ last_end }}" placeholder="00:00:00" required>
 
-            <h3>Segments</h3>
-            <div id="segments">
-                <div class="segment">
-                    <div class="time-row">
-                        <div class="time-col">
-                            <label>Start:</label>
-                            <input type="text" name="start[]" value="{{ last_start }}" placeholder="00:00:00" required>
-                        </div>
-                        <div class="time-col">
-                            <label>End:</label>
-                            <input type="text" name="end[]" value="{{ last_end }}" placeholder="00:00:00" required>
-                        </div>
-                    </div>
-                    <div class="adjust-row">
-                        <div class="adjust-col">
+                        <div>
                             <label>Adjust:</label>
                             <select name="start_sign[]">
                                 <option value="+">+</option>
@@ -205,8 +155,7 @@
                             </select>
                             <input type="number" name="start_frames[]" value="0" min="0">
                             <span>frames</span>
-                        </div>
-                        <div class="adjust-col">
+
                             <label>Adjust:</label>
                             <select name="end_sign[]">
                                 <option value="+">+</option>
@@ -217,68 +166,30 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <button type="button" id="addSegmentBtn">Add Segment</button>
+                <button type="button" id="addSegmentBtn">Add Segment</button>
+                <br><br>
+                <button type="submit">Generate</button>
+            </form>
+        </div>
 
-            <button type="submit">Generate</button>
-            <button type="button" id="regenerateBtn" style="margin-top:10px;">
-                Regenerate (delete last)
-            </button>
-        </form>
+        <!-- ================================
+             OUTPUT MEDIA PANEL
+        ================================= -->
+        <div class="panel">
+            <h2>Generated Media</h2>
+            <button id="deleteAllMediaBtn">Delete All</button>
+            <button id="stitchBtn">Stitch Selected</button>
+            <div id="gifPanel">(loading...)</div>
+        </div>
 
-        {% if media_path %}
-            <h3>Latest Output</h3>
-            {% if media_path.endswith('.mp4') %}
-                <video class="thumb" src="{{ media_path }}" controls loop muted></video>
-            {% else %}
-                <img src="{{ media_path }}" class="thumb">
-            {% endif %}
-            <p><a href="{{ media_path }}" download>Download latest</a></p>
-        {% endif %}
     </div>
 
-    <div class="gif-gallery">
-        <h3>Generated Clips & GIFs</h3>
-
-        <button id="deleteAllBtn" class="delete-btn" style="width:60%;">
-            Delete All
-        </button>
-
-        <div id="gifPanel">Loading…</div>
-
-        <button id="stitchBtn" class="delete-btn" style="width:60%; margin-top:20px;">
-            Stitch Selected
-        </button>
-    </div>
-
-</div>
-
+<!-- ================================
+     JAVASCRIPT
+================================= -->
 <script>
 let selectionOrder = [];
-
-/* ------------------------------
-   TIME FORMATTER
------------------------------- */
-function formatTime(seconds) {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = (seconds % 60).toFixed(3);
-    return (
-        String(h).padStart(2, "0") + ":" +
-        String(m).padStart(2, "0") + ":" +
-        String(s).padStart(6, "0")
-    );
-}
-
-/* ------------------------------
-   PREVIEW LOADER
------------------------------- */
-function loadPreview(src) {
-    const player = document.getElementById("previewPlayer");
-    player.src = src;
-    player.style.display = "block";
-}
 
 /* ------------------------------
    ADD SEGMENT
@@ -288,55 +199,35 @@ document.getElementById("addSegmentBtn").onclick = () => {
     const div = document.createElement("div");
     div.className = "segment";
     div.innerHTML = `
-        <div class="time-row">
-            <div class="time-col">
-                <label>Start:</label>
-                <input type="text" name="start[]" placeholder="00:00:00" required>
-            </div>
-            <div class="time-col">
-                <label>End:</label>
-                <input type="text" name="end[]" placeholder="00:00:00" required>
-            </div>
-        </div>
-        <div class="adjust-row">
-            <div class="adjust-col">
-                <label>Adjust:</label>
-                <select name="start_sign[]">
-                    <option value="+">+</option>
-                    <option value="-">-</option>
-                </select>
-                <input type="number" name="start_frames[]" value="0" min="0">
-                <span>frames</span>
-            </div>
-            <div class="adjust-col">
-                <label>Adjust:</label>
-                <select name="end_sign[]">
-                    <option value="+">+</option>
-                    <option value="-">-</option>
-                </select>
-                <input type="number" name="end_frames[]" value="0" min="0">
-                <span>frames</span>
-            </div>
+        <label>Start:</label>
+        <input type="text" name="start[]" placeholder="00:00:00" required>
+
+        <label>End:</label>
+        <input type="text" name="end[]" placeholder="00:00:00" required>
+
+        <div>
+            <label>Adjust:</label>
+            <select name="start_sign[]">
+                <option value="+">+</option>
+                <option value="-">-</option>
+            </select>
+            <input type="number" name="start_frames[]" value="0" min="0">
+            <span>frames</span>
+
+            <label>Adjust:</label>
+            <select name="end_sign[]">
+                <option value="+">+</option>
+                <option value="-">-</option>
+            </select>
+            <input type="number" name="end_frames[]" value="0" min="0">
+            <span>frames</span>
         </div>
     `;
     container.appendChild(div);
 };
 
 /* ------------------------------
-   SET START / END BUTTONS
------------------------------- */
-document.getElementById("setStartBtn").onclick = () => {
-    const t = document.getElementById("previewPlayer").currentTime;
-    document.querySelector("input[name='start[]']").value = formatTime(t);
-};
-
-document.getElementById("setEndBtn").onclick = () => {
-    const t = document.getElementById("previewPlayer").currentTime;
-    document.querySelector("input[name='end[]']").value = formatTime(t);
-};
-
-/* ------------------------------
-   FILE BROWSER + MKV REMUX
+   FILE BROWSER
 ------------------------------ */
 async function loadDir(path = "") {
     const res = await fetch("/listdir?path=" + encodeURIComponent(path));
@@ -367,31 +258,9 @@ async function loadDir(path = "") {
         div.textContent = file;
         div.className = "item";
 
-        div.onclick = async () => {
-            let fullPath = data.path ? "/videos/" + data.path + "/" + file : "/videos/" + file;
+        div.onclick = () => {
+            const fullPath = data.path ? "/videos/" + data.path + "/" + file : "/videos/" + file;
             document.getElementById("hostpath").value = fullPath;
-
-            if (file.toLowerCase().endsWith(".mkv")) {
-                console.log("MKV detected, calling remux:", fullPath);
-
-                const res = await fetch("/remux", {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({ path: fullPath })
-                });
-
-                const out = await res.json();
-
-                if (out.output) {
-                    fullPath = out.output;
-                    document.getElementById("hostpath").value = fullPath;
-                } else {
-                    alert("MKV remux failed");
-                    return;
-                }
-            }
-
-            loadPreview(fullPath);
         };
 
         browser.appendChild(div);
@@ -441,7 +310,6 @@ async function loadMedia() {
         checkbox.type = "checkbox";
         checkbox.className = "stitch-select";
         checkbox.value = name;
-        checkbox.style.marginTop = "8px";
         checkbox.onclick = () => toggleSelection(name, checkbox);
 
         const delBtn = document.createElement("button");
@@ -460,31 +328,25 @@ async function loadMedia() {
         wrapper.appendChild(link);
         wrapper.appendChild(checkbox);
         wrapper.appendChild(delBtn);
+
         panel.appendChild(wrapper);
     });
 }
 
 /* ------------------------------
-   DELETE ALL
------------------------------- */
-document.getElementById("deleteAllBtn").onclick = async () => {
-    await fetch("/delete_all_media", { method: "POST" });
-    loadMedia();
-};
-
-/* ------------------------------
-   STITCH SELECTED
+   SELECTION ORDER FOR STITCHING
 ------------------------------ */
 function toggleSelection(name, checkbox) {
     if (checkbox.checked) {
-        if (!selectionOrder.includes(name)) {
-            selectionOrder.push(name);
-        }
+        selectionOrder.push(name);
     } else {
         selectionOrder = selectionOrder.filter(n => n !== name);
     }
 }
 
+/* ------------------------------
+   STITCH SELECTED
+------------------------------ */
 document.getElementById("stitchBtn").onclick = async () => {
     if (selectionOrder.length < 2) {
         alert("Select at least two items to stitch.");
@@ -497,42 +359,26 @@ document.getElementById("stitchBtn").onclick = async () => {
         body: JSON.stringify({ files: selectionOrder })
     });
 
-    const data = await res.json();
-    if (data.output) {
-        window.location = "/?media=" + encodeURIComponent(data.output);
-    } else if (data.error) {
-        alert(data.error);
+    const out = await res.json();
+
+    if (out.output) {
+        loadMedia();
+        alert("Stitched successfully!");
+    } else {
+        alert("Stitch failed.");
     }
 };
 
 /* ------------------------------
-   REGENERATE
+   DELETE ALL MEDIA
 ------------------------------ */
-document.getElementById("regenerateBtn").onclick = () => {
-    const params = new URLSearchParams(window.location.search);
-    const last = params.get("media");
-    if (!last) {
-        alert("No previous output to regenerate.");
-        return;
-    }
-
-    fetch("/regenerate", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({ last })
-    })
-    .then(r => r.json())
-    .then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else if (data.redirect) {
-            window.location = data.redirect;
-        }
-    });
+document.getElementById("deleteAllMediaBtn").onclick = async () => {
+    await fetch("/delete_all_media", { method: "POST" });
+    loadMedia();
 };
 
 /* ------------------------------
-   INIT
+   INITIAL LOAD
 ------------------------------ */
 window.onload = () => {
     loadDir("");
